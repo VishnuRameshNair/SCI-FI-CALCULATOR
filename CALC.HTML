@@ -1,1 +1,263 @@
-ADDED CALC.HTML
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Scientific Calculator</title>
+
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+        }
+
+        .calculator {
+            background: #010101;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 340px;
+        }
+
+        .display {
+            background: #fff;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: right;
+            min-height: 60px;
+        }
+
+        #result {
+            font-size: 2em;
+            margin: 0;
+            word-wrap: break-word;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 15px 5px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #FC962A;
+            color: #010101;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #FEFEFE;
+        }
+
+        .operator {
+            background: #FFE946;
+        }
+
+        .operator:hover {
+            background: #FEFEFE;
+        }
+
+        .function {
+            background: #FFE946;
+        }
+
+        .function:hover {
+            background: #FEFEFE;
+        }
+
+        .equals {
+            background: #0349F5;
+        }
+
+        .equals:hover {
+            background: #FEFEFE;
+        }
+
+        .clear {
+            background: #0349F5;
+        }
+
+        .clear:hover {
+            background: #FEFEFE;
+        }
+    </style>
+</head>
+<body>
+
+
+
+    <div class="calculator">
+        <div class="display">
+            <p id="result">0</p>
+        </div>
+        <div class="buttons">
+            <!-- Scientific Functions -->
+            <button class="function" onclick="calculate('sin')">sin</button>
+            <button class="function" onclick="calculate('cos')">cos</button>
+            <button class="function" onclick="calculate('tan')">tan</button>
+            <button class="function" onclick="calculate('log')">log</button>
+            <button class="function" onclick="calculate('ln')">ln</button>
+
+            <button class="function" onclick="calculate('sqrt')">√</button>
+            <button class="function" onclick="calculate('square')">x²</button>
+            <button class="function" onclick="calculate('power')">xʸ</button>
+            <button class="function" onclick="calculate('pi')">π</button>
+            <button class="function" onclick="calculate('e')">e</button>
+
+            <!-- Numbers and Basic Operators -->
+            <button onclick="appendNumber('9')">9</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('7')">7</button>
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="backspace()">⌫</button>
+            
+            <button onclick="appendNumber('6')">6</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('(')">(</button>
+            <button onclick="appendNumber(')')">)</button>
+             
+
+            <button onclick="appendNumber('3')">3</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('1')">1</button>
+            <button class="operator" onclick="appendOperator('*')">×</button>
+            <button class="operator" onclick="appendOperator('/')">/</button>                       
+            
+
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendNumber('.')">.</button>
+            <button class="equals" onclick="calculate('equals')">=</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+            <button class="operator" onclick="appendOperator('-')">-</button>            
+
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('result');
+        let currentExpression = '0';
+        let lastResult = '';
+
+        function updateDisplay() {
+            display.textContent = currentExpression;
+        }
+
+        function appendNumber(num) {
+            if (currentExpression === '0' || currentExpression === 'Error') {
+                currentExpression = num;
+            } else {
+                currentExpression += num;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(operator) {
+            if (currentExpression !== 'Error') {
+                currentExpression += operator;
+                updateDisplay();
+            }
+        }
+
+        function clearDisplay() {
+            currentExpression = '0';
+            lastResult = '';
+            updateDisplay();
+        }
+
+        function backspace() {
+            if (currentExpression !== 'Error') {
+                if (currentExpression.length === 1) {
+                    currentExpression = '0';
+                } else {
+                    currentExpression = currentExpression.slice(0, -1);
+                }
+                updateDisplay();
+            }
+        }
+
+        function calculate(operation) {
+            try {
+                if (operation === 'equals') {
+                    lastResult = eval(currentExpression);
+                    currentExpression = String(lastResult);
+                } else if (operation === 'sin') {
+                    lastResult = Math.sin(eval(currentExpression));
+                    currentExpression = String(lastResult);
+                } else if (operation === 'cos') {
+                    lastResult = Math.cos(eval(currentExpression));
+                    currentExpression = String(lastResult);
+                } else if (operation === 'tan') {
+                    lastResult = Math.tan(eval(currentExpression));
+                    currentExpression = String(lastResult);
+                } else if (operation === 'log') {
+                    lastResult = Math.log10(eval(currentExpression));
+                    currentExpression = String(lastResult);
+                } else if (operation === 'ln') {
+                    lastResult = Math.log(eval(currentExpression));
+                    currentExpression = String(lastResult);
+                } else if (operation === 'sqrt') {
+                    lastResult = Math.sqrt(eval(currentExpression));
+                    currentExpression = String(lastResult);
+                } else if (operation === 'square') {
+                    lastResult = Math.pow(eval(currentExpression), 2);
+                    currentExpression = String(lastResult);
+                } else if (operation === 'power') {
+                    currentExpression += '**';
+                } else if (operation === 'pi') {
+                    if (currentExpression === '0') {
+                        currentExpression = Math.PI.toString();
+                    } else {
+                        currentExpression += Math.PI.toString();
+                    }
+                } else if (operation === 'e') {
+                    if (currentExpression === '0') {
+                        currentExpression = Math.E.toString();
+                    } else {
+                        currentExpression += Math.E.toString();
+                    }
+                }
+                updateDisplay();
+            } catch (error) {
+                currentExpression = 'Error';
+                updateDisplay();
+            }
+        }
+
+        // Add keyboard support
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            if (/[0-9\.]/.test(key)) {
+                appendNumber(key);
+            } else if (['+', '-', '*', '/', '(', ')'].includes(key)) {
+                appendOperator(key);
+            } else if (key === 'Enter') {
+                calculate('equals');
+            } else if (key === 'Backspace') {
+                backspace();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
